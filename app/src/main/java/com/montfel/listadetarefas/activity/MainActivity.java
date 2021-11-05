@@ -64,47 +64,33 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onLongItemClick(View view, int position) {
                                 tarefaSelecionada = listaTarefas.get(position);
-
-                                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-
-                                dialog.setTitle("Confirmar exclusão");
-                                dialog.setMessage("Deseja excluir a tarefa " + tarefaSelecionada.getNomeTarefa() + "?");
-                                dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        TarefaDAO tarefaDAO = new TarefaDAO(getApplicationContext());
-                                        if (tarefaDAO.deletar(tarefaSelecionada)) {
-                                            carregarListaTarefas();
-                                            Toast.makeText(getApplicationContext(), "Sucesso ao excluir tarefa!",
+                                new AlertDialog
+                                       .Builder(MainActivity.this)
+                                       .setTitle(R.string.confirmar_exclusão)
+                                       .setMessage(getString(R.string.deseja_excluir) + tarefaSelecionada.getNomeTarefa() + "?")
+                                       .setPositiveButton(R.string.sim, (dialog, which) -> {
+                                            TarefaDAO tarefaDAO = new TarefaDAO(getApplicationContext());
+                                            if (tarefaDAO.deletar(tarefaSelecionada)) {
+                                                carregarListaTarefas();
+                                                Toast.makeText(getApplicationContext(), R.string.sucesso_excluir,
                                                     Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Erro ao excluir tarefa!",
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), R.string.erro_excluir,
                                                     Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    }
-                                });
-
-                                dialog.setNegativeButton("Não", null);
-
-                                dialog.create();
-                                dialog.show();
+                                            }})
+                                       .setNegativeButton(R.string.nao, null)
+                                       .create()
+                                       .show();
                             }
 
                             @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            }
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
                         }
                 )
         );
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AdicionarTarefaActivity.class));
-            }
-        });
+        binding.fab.setOnClickListener(view ->
+                startActivity(new Intent(getApplicationContext(), AdicionarTarefaActivity.class)));
     }
 
     public void carregarListaTarefas() {
