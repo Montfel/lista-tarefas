@@ -42,6 +42,5 @@ public class DbHelper extends SQLiteOpenHelper {
         }catch (Exception e) {
             Log.i("INFO DB", "Erro ao atualizar o APP" + e.getMessage());
         }
-
     }
 }
